@@ -1,0 +1,7 @@
+cleverbridge:
+  client_id: "your_cleverbridge_client_id"
+  client_secret: "your_cleverbridge_client_secret"
+  base_url: "https://rest.cleverbridge.com"
+  debug: true
+  log_file: "cb_api_client/logs/cleverbridge.log" 
+  log_level: "info"
