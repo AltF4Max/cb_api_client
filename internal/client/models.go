@@ -10,6 +10,11 @@ import (
 	"time"
 )
 
+type APIClient struct {
+	BaseClient
+	logger *Logger
+}
+
 type Subscription struct {
 	ID               string    `json:"id"`
 	Status           string    `json:"status"`

@@ -8,18 +8,16 @@ import (
 )
 
 func main() {
-	config := &client.CleverbridgeConfig{
-		ClientID:     "your_cleverbridge_client_id",
-		ClientSecret: "your_cleverbridge_client_secret",
-		BaseURL:      "https://rest.cleverbridge.com",
-		Debug:        true,
+	config, err := LoadConfig("config/config.yaml")
+	if err != nil {
+		log.Fatalf("❌ Failed to load config: %v", err)
 	}
 
-	cbClient := client.NewBaseClient(config)
+	cbClient := client.NewAPIClient(config)
+	defer cbClient.Close()
 
 	ctx := context.Background()
 
-	//fmt.Println("1. 📦 Getting subscription by ID...")
 	subscription, err := cbClient.GetSubscription(ctx, "S18577447", "false")
 	if err != nil {
 		log.Printf("⚠️ Error getting subscription: %v", err)
@@ -28,7 +26,6 @@ func main() {
 			subscription.ID, subscription.Status, subscription.Plan)
 	}
 
-	//fmt.Println("\n2. 🛒 Getting subscriptions by purchase...")
 	purchaseSubscriptions, err := cbClient.GetSubscriptionsByPurchase(ctx, "P123456789")
 	if err != nil {
 		log.Printf("⚠️ Error getting subscriptions by purchase: %v", err)
@@ -39,7 +36,6 @@ func main() {
 		}
 	}
 
-	//fmt.Println("\n3. 👤 Getting subscriptions for customer...")
 	customerSubscriptions, err := cbClient.GetSubscriptionsForCustomer(ctx, "CUST12345")
 	if err != nil {
 		log.Printf("⚠️ Error getting subscriptions for customer: %v", err)
@@ -49,4 +45,8 @@ func main() {
 			fmt.Printf("   %d. %s - %s - %s\n", i+1, sub.ID, sub.Status, sub.Plan)
 		}
 	}
+}
+
+func LoadConfig() {
+
 }
